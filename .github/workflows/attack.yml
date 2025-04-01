@@ -48,5 +48,5 @@ jobs:
     # Step 8: Stop the Docker container after attack simulation
     - name: Stop Docker container
       run: |
-        docker stop ddos-server
-        docker rm ddos-server
+             docker stop ddos-server || echo "Container is not running"
+             docker rm ddos-server || echo "Container does not exist"
