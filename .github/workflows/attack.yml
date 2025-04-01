@@ -3,7 +3,7 @@ name: Simulate DDoS Attack
 on:
   push:
     branches:
-      - main  # This triggers the workflow when changes are pushed to the main branch
+      - master  # This triggers the workflow when changes are pushed to the main branch
 
 jobs:
   attack:
