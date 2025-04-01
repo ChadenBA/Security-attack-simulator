@@ -1,0 +1,52 @@
+name: Simulate DDoS Attack
+
+on:
+  push:
+    branches:
+      - main  # This triggers the workflow when changes are pushed to the main branch
+
+jobs:
+  attack:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Step 2: Set up Docker (to run the Node.js server in a container)
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    # Step 3: Build the Docker image for the Node.js server
+    - name: Build Docker image
+      run: |
+        docker build -t ddos-simulation .
+
+    # Step 4: Run the Docker container in detached mode
+    - name: Run Docker container
+      run: |
+        docker run -d -p 3000:3000 --name ddos-server ddos-simulation
+
+    # Step 5: Install HTTP tool to simulate the DDoS attack
+    - name: Install HTTP tool (httpie)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y httpie
+
+    # Step 6: Simulate DDoS attack (flood the server with HTTP requests)
+    - name: Simulate DDoS attack
+      run: |
+        for i in {1..1000}; do
+          http --ignore-stdin http://localhost:3000 &  # Flood the server with requests
+        done
+
+    # Step 7: Wait for the attack to run (optional - you can add delays to observe results)
+    - name: Wait for attack to finish
+      run: sleep 10  # This can be adjusted based on how long you want the attack to run
+
+    # Step 8: Stop the Docker container after attack simulation
+    - name: Stop Docker container
+      run: |
+        docker stop ddos-server
+        docker rm ddos-server
