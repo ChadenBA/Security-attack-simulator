@@ -21,7 +21,7 @@ jobs:
     - name: Simulate DDoS attack
       run: |
         for i in {1..1000}; do
-          http --ignore-stdin https://randomsub.ngrok.io &  # Replace with your Ngrok URL
+          http --ignore-stdin https://63ca-197-240-82-54.ngrok-free.app &  # Replace with your Ngrok URL
         done
 
     - name: Wait for attack to finish
